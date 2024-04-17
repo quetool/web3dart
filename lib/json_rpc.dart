@@ -64,11 +64,17 @@ class JsonRPC extends RpcService {
     if (data.containsKey('error')) {
       final error = data['error'];
 
-      final code = error['code'] as int;
-      final message = error['message'] as String;
+      final code = (error['code'] as int?) ?? 0;
+      final message = error['message'] as String?;
+      final details = error['details'];
       final errorData = error['data'];
 
-      throw RPCError(code, message, errorData);
+      throw RPCError(
+        code,
+        message,
+        details,
+        errorData,
+      );
     }
 
     final id = data['id'] as int;
@@ -93,19 +99,22 @@ class RPCResponse {
 /// Exception thrown when an the server returns an error code to an rpc request.
 class RPCError implements Exception {
   /// Constructor.
-  const RPCError(this.errorCode, this.message, this.data);
+  const RPCError(this.errorCode, this.message, this.details, this.data);
 
   /// Error code.
   final int errorCode;
 
   /// Message.
-  final String message;
+  final String? message;
+
+  /// Details
+  final dynamic details;
 
   /// Data.
   final dynamic data;
 
   @override
   String toString() {
-    return 'RPCError: got code $errorCode with msg "$message".';
+    return 'RPCError: got code $errorCode with message: $message, details: $details, data: $data';
   }
 }
