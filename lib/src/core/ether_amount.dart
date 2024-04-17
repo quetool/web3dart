@@ -1,4 +1,4 @@
-part of web3dart;
+part of 'package:web3dart/web3dart.dart';
 
 /// Utility class to easily convert amounts of Ether into different units of
 /// quantities.
@@ -93,6 +93,6 @@ class EtherAmount {
   int get hashCode => getInWei.hashCode;
 
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       other is EtherAmount && other.getInWei == getInWei;
 }
